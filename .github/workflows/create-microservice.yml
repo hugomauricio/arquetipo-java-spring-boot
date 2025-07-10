@@ -1,0 +1,60 @@
+name: Create Microservice from Template
+
+on:
+  workflow_dispatch:
+    inputs:
+      service_name:
+        description: 'Nombre del microservicio (ej: msa-product)'
+        required: true
+        type: string
+      package_name:
+        description: 'Nombre del paquete base (ej: product)'
+        required: true
+        type: string
+      description:
+        description: 'Descripción del microservicio'
+        required: true
+        type: string
+
+jobs:
+  generate-microservice:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout workflow repo
+        uses: actions/checkout@v4
+
+      - name: Install Cookiecutter
+        run: pip install cookiecutter
+
+      - name: Generate microservice from template
+        run: |
+          cookiecutter https://github.com/hugomauricio/arquetipo-java-spring-boot \
+            --no-input \
+            service_name='${{ github.event.inputs.service_name }}' \
+            package_name='${{ github.event.inputs.package_name }}' \
+            description='${{ github.event.inputs.description }}'
+
+      - name: Create new repository via GitHub API
+        id: create_repo
+        uses: peter-evans/create-repository@v5
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          name: ${{ github.event.inputs.service_name }}
+          private: true
+          description: ${{ github.event.inputs.description }}
+
+      - name: Push generated code to new repo
+        run: |
+          cd ${{ github.event.inputs.service_name }}
+          git init
+          git remote add origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository_owner }}/${{ github.event.inputs.service_name }}.git
+          git add .
+          git config user.email "sacaquirinmoscoso@gmail.com"
+          git config user.name "Automation Bot"
+          git commit -m "Initial commit from template"
+          git push -u origin master
+
+      - name: Output new repo URL
+        run: echo "Repository URL: https://github.com/${{ github.repository_owner }}/${{ github.event.inputs.service_name }}"
+
