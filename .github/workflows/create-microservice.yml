@@ -53,8 +53,4 @@ jobs:
           git config user.email "sacaquirinmoscoso@gmail.com"
           git config user.name "Automation Bot"
           git commit -m "Initial commit from template"
-          git push -u origin master
-
-      - name: Output new repo URL
-        run: echo "Repository URL: https://github.com/${{ github.repository_owner }}/${{ github.event.inputs.service_name }}"
-
+          git push -u origin main
