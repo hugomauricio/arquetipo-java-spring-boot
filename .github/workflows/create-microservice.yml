@@ -36,21 +36,30 @@ jobs:
             description='${{ github.event.inputs.description }}'
 
       - name: Create new repository via GitHub API
-        id: create_repo
-        uses: peter-evans/create-repository@v4
-        with:
-          token: ${{ secrets.GH_TOKEN }}
-          name: ${{ github.event.inputs.service_name }}
-          private: true
-          description: ${{ github.event.inputs.description }}
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          REPO_NAME: ${{ github.event.inputs.service_name }}
+          REPO_DESC: ${{ github.event.inputs.description }}
+          OWNER: ${{ github.repository_owner }}
+        run: |
+          curl -X POST \
+            -H "Authorization: token $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/orgs/$OWNER/repos \
+            -d "{\"name\":\"$REPO_NAME\", \"private\":true, \"description\":\"$REPO_DESC\"}"
 
       - name: Push generated code to new repo
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          REPO_NAME: ${{ github.event.inputs.service_name }}
+          OWNER: ${{ github.repository_owner }}
         run: |
-          cd ${{ github.event.inputs.service_name }}
+          cd $REPO_NAME
           git init
-          git remote add origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository_owner }}/${{ github.event.inputs.service_name }}.git
+          git remote add origin https://x-access-token:$GH_TOKEN@github.com/$OWNER/$REPO_NAME.git
           git add .
           git config user.email "sacaquirinmoscoso@gmail.com"
           git config user.name "Automation Bot"
           git commit -m "Initial commit from template"
+          git branch -M main
           git push -u origin main
