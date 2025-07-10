@@ -37,7 +37,7 @@ jobs:
 
       - name: Create new repository via GitHub API
         id: create_repo
-        uses: peter-evans/create-repository@v5
+        uses: peter-evans/create-repository@v4
         with:
           token: ${{ secrets.GH_TOKEN }}
           name: ${{ github.event.inputs.service_name }}
