@@ -1,0 +1,65 @@
+name: Create Microservice from Template
+
+on:
+  workflow_dispatch:
+    inputs:
+      service_name:
+        description: 'Nombre del microservicio (ej: msa-product)'
+        required: true
+        type: string
+      package_name:
+        description: 'Nombre del paquete base (ej: product)'
+        required: true
+        type: string
+      description:
+        description: 'Descripción del microservicio'
+        required: true
+        type: string
+
+jobs:
+  generate-microservice:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout workflow repo
+        uses: actions/checkout@v4
+
+      - name: Install Cookiecutter
+        run: pip install cookiecutter
+
+      - name: Generate microservice from template
+        run: |
+          cookiecutter https://github.com/hugomauricio/arquetipo-java-spring-boot \
+            --no-input \
+            service_name='${{ github.event.inputs.service_name }}' \
+            package_name='${{ github.event.inputs.package_name }}' \
+            description='${{ github.event.inputs.description }}'
+
+      - name: Create new repository via GitHub API
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          REPO_NAME: ${{ github.event.inputs.service_name }}
+          REPO_DESC: ${{ github.event.inputs.description }}
+          OWNER: ${{ github.repository_owner }}
+        run: |
+          curl -X POST \
+            -H "Authorization: token $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/orgs/$OWNER/repos \
+            -d "{\"name\":\"$REPO_NAME\", \"private\":true, \"description\":\"$REPO_DESC\"}"
+
+      - name: Push generated code to new repo
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          REPO_NAME: ${{ github.event.inputs.service_name }}
+          OWNER: ${{ github.repository_owner }}
+        run: |
+          cd $REPO_NAME
+          git init
+          git remote add origin https://x-access-token:$GH_TOKEN@github.com/$OWNER/$REPO_NAME.git
+          git add .
+          git config user.email "sacaquirinmoscoso@gmail.com"
+          git config user.name "Automation Bot"
+          git commit -m "Initial commit from template"
+          git branch -M main
+          git push -u origin main
