@@ -45,7 +45,7 @@ jobs:
           curl -X POST \
             -H "Authorization: token $GH_TOKEN" \
             -H "Accept: application/vnd.github+json" \
-            https://api.github.com/orgs/$OWNER/repos \
+            https://api.github.com/user/repos \
             -d "{\"name\":\"$REPO_NAME\", \"private\":true, \"description\":\"$REPO_DESC\"}"
 
       - name: Push generated code to new repo
@@ -56,7 +56,7 @@ jobs:
         run: |
           cd $REPO_NAME
           git init
-          git remote add origin https://x-access-token:$GH_TOKEN@github.com/$OWNER/$REPO_NAME.git
+          git remote add origin https://x-access-token:$GH_TOKEN@github.com/hugomauricio/$REPO_NAME.git
           git add .
           git config user.email "sacaquirinmoscoso@gmail.com"
           git config user.name "Automation Bot"
