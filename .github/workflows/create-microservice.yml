@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout workflow repo
         uses: actions/checkout@v4
+      - name: Usar el output
+        run: echo "Tag generado hugo"  
 
       - name: Install Cookiecutter
         run: pip install cookiecutter
