@@ -12,7 +12,7 @@
 	<artifactId>msa-producer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>msa-producer</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Demo project for Spring Boot v1</description>
 	<url/>
 	<licenses>
 		<license/>
