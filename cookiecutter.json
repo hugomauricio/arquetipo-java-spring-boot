@@ -1,5 +1,7 @@
 {
   "service_name": "msa-product",
   "package_name": "product",
-  "description": "Microservicio Spring Boot base"
+  "description": "Microservicio Spring Boot base",
+  "isContract": "SI",
+  "contactOpenApi":"mi contenido"		
 }

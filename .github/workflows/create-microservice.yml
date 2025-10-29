@@ -15,6 +15,14 @@ on:
         description: 'Descripción del microservicio'
         required: true
         type: string
+      isContract:
+        description: 'Si tiene contrato'
+        required: true
+        type: string
+      contactOpenApi:
+        description: 'Contenido del contrato'
+        required: true
+        type: string	
 
 jobs:
   generate-microservice:
@@ -35,7 +43,10 @@ jobs:
             --no-input \
             service_name='${{ github.event.inputs.service_name }}' \
             package_name='${{ github.event.inputs.package_name }}' \
-            description='${{ github.event.inputs.description }}'
+            description='${{ github.event.inputs.description }}'   \
+	    isContract='${{ github.event.inputs.isContract }}'     \
+            contactOpenApi='${{ github.event.inputs.isContract }}'
+
 
       - name: Create new repository via GitHub API
         env:
