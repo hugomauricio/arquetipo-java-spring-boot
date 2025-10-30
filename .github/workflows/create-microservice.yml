@@ -56,7 +56,7 @@ jobs:
             isContract='${{ github.event.inputs.isContract }}' \
             contactOpenApi='${{ github.event.inputs.contactOpenApi }}' \
             isClientWeb='${{ github.event.inputs.contactOpenApi }}' \
-            contentClient='${{ github.event.inputs.contactOpenApi }}'
+            contentClient='${{ github.event.inputs.contentClient }}'
 
       - name: Create new repository via GitHub API
         env:
