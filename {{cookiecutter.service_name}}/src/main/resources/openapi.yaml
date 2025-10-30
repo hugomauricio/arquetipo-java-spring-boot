@@ -1,3 +1,1 @@
-{{ cookiecutter.contactOpenApi
-   | replace('\\r\\n', '\n')
-   | replace('\\n', '\n') }}
+{{ cookiecutter.contactOpenApi }}
