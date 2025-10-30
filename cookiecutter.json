@@ -3,5 +3,7 @@
   "package_name": "product",
   "description": "Microservicio Spring Boot base",
   "isContract": "SI",
-  "contactOpenApi":"mi contenido"		
+  "contactOpenApi":"mi contenido",
+  "isClientWeb":"SI",
+  "contentClient":"contenido del cliente"		
 }
