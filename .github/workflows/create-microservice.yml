@@ -23,6 +23,14 @@ on:
         description: 'Contenido del contrato'
         required: true
         type: string
+      isClientWeb:
+        description: 'Si tiene contrato cliente'
+        required: true
+        type: string 
+      contentClient:
+        description: 'contenido del contrato'
+        required: true
+        type: string   
 
 jobs:
   generate-microservice:
@@ -46,7 +54,9 @@ jobs:
             package_name='${{ github.event.inputs.package_name }}' \
             description='${{ github.event.inputs.description }}' \
             isContract='${{ github.event.inputs.isContract }}' \
-            contactOpenApi='${{ github.event.inputs.contactOpenApi }}'
+            contactOpenApi='${{ github.event.inputs.contactOpenApi }}' \
+            isClientWeb='${{ github.event.inputs.contactOpenApi }}' \
+            contentClient='${{ github.event.inputs.contactOpenApi }}'
 
       - name: Create new repository via GitHub API
         env:
