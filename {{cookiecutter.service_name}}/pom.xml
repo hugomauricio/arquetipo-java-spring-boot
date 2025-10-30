@@ -121,7 +121,7 @@
 						</goals>
 						<configuration>
 							<generatorName>spring</generatorName>
-							<inputSpec>${project.basedir}/src/main/resources/openapi.yaml</inputSpec>
+							<inputSpec>${project.basedir}/src/main/resources/openapi.json</inputSpec>
 							<apiPackage>com.nttdata.services.server</apiPackage>
 							<modelPackage>com.nttdata.services.server.models</modelPackage>
 							<library>spring-boot</library>
@@ -156,7 +156,7 @@
 						</goals>
 						<configuration>
 							<generatorName>spring</generatorName>
-							<inputSpec>${project.basedir}/src/main/resources/openapi-client.yaml</inputSpec>
+							<inputSpec>${project.basedir}/src/main/resources/openapi-client.json</inputSpec>
 							<apiPackage>com.nttdata.services.rest.client</apiPackage>
 							<modelPackage>com.nttdata.services.rest.client.models</modelPackage>
 							<library>spring-cloud</library>
