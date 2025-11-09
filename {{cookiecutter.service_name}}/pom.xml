@@ -127,32 +127,43 @@
 						<configuration>
 							<generatorName>spring</generatorName>
 							<inputSpec>${project.basedir}/src/main/resources/openapi.json</inputSpec>
+
 							<apiPackage>com.test.services.server</apiPackage>
 							<modelPackage>com.test.services.server.models</modelPackage>
 							<library>spring-boot</library>
-<!--							<templateDirectory>${maven.multiModuleProjectDirectory}/src/main/resources/openapi-templates/client</templateDirectory>-->
+
 							<generateApiTests>false</generateApiTests>
 							<generateModelTests>false</generateModelTests>
+
 							<configOptions>
-								<useTags>true</useTags>             <!-- clave -->
-								<apiNameSuffix>Api</apiNameSuffix>  <!-- clave -->
+								<useTags>true</useTags>
+								<apiNameSuffix>Api</apiNameSuffix>
 
 								<useSpringBoot3>true</useSpringBoot3>
 								<useJakartaEe>true</useJakartaEe>
 								<serializableModel>true</serializableModel>
 								<dateLibrary>java8</dateLibrary>
 								<openApiNullable>false</openApiNullable>
+
+								<!-- Opción A: solo interfaces, tú haces el controller -->
 								<apiFirst>false</apiFirst>
-								<delegatePattern>true</delegatePattern>
+								<delegatePattern>false</delegatePattern>
+								<interfaceOnly>true</interfaceOnly>
+
 								<configPackage>com.test.services.config</configPackage>
 								<sourceFolder>src/main/java</sourceFolder>
 								<basePackage>com.test</basePackage>
-								<disallowAdditionalPropertiesIfNotPresent>true
-								</disallowAdditionalPropertiesIfNotPresent>
-								<interfaceOnly>true</interfaceOnly>
+								<disallowAdditionalPropertiesIfNotPresent>true</disallowAdditionalPropertiesIfNotPresent>
+
+								<!-- Aquí quitamos los constructores de Lombok -->
+								<additionalModelTypeAnnotations>
+									@lombok.Builder
+									@com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true)
+								</additionalModelTypeAnnotations>
 							</configOptions>
 						</configuration>
 					</execution>
+
 
 					<execution>
 						<id>client</id>
@@ -162,11 +173,14 @@
 						<configuration>
 							<generatorName>spring</generatorName>
 							<inputSpec>${project.basedir}/src/main/resources/openapi-client.json</inputSpec>
+
 							<apiPackage>com.test.services.rest.client</apiPackage>
 							<modelPackage>com.test.services.rest.client.models</modelPackage>
 							<library>spring-cloud</library>
+
 							<generateApiTests>false</generateApiTests>
 							<generateModelTests>false</generateModelTests>
+
 							<configOptions>
 								<useResponseEntity>false</useResponseEntity>
 								<useSpringBoot3>true</useSpringBoot3>
@@ -176,12 +190,20 @@
 								<openApiNullable>false</openApiNullable>
 								<interfaceOnly>true</interfaceOnly>
 								<dateLibrary>java8</dateLibrary>
-								<serializationLibrary>true</serializationLibrary>
+
+								<!-- solo jackson, sin "true" -->
 								<serializationLibrary>jackson</serializationLibrary>
+
 								<useTags>true</useTags>
 								<hideGenerationTimestamp>true</hideGenerationTimestamp>
 								<sourceFolder>src/main/java</sourceFolder>
 								<configPackage>com.test.services.rest.client.config</configPackage>
+
+								<!-- sin constructores Lombok para evitar choques -->
+								<additionalModelTypeAnnotations>
+									@lombok.Builder
+									@com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true)
+								</additionalModelTypeAnnotations>
 							</configOptions>
 						</configuration>
 					</execution>
